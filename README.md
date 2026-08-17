@@ -1,6 +1,6 @@
 # Documentación Técnica: Microservicio BIA Energy.
 
-## 1. Descripción General del Proyecto
+## 1.  Descripción General del Proyecto
 
 Este proyecto es un microservicio backend desarrollado en **Golang** diseñado para el, procesamiento, agregación y consulta de series temporales de consumo energético. Cumple con los requerimientos técnicos para la prueba de **BIA Energy**.
 
