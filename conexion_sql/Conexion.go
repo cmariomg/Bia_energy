@@ -50,7 +50,7 @@ func ObtenerTodosLosRegistros(db *sql.DB) ([]estructura.RegistroEnergia, error) 
 	// 3. Se crea tabla interna del tipo  RefistroEnergia
 	var tablaRegistros []estructura.RegistroEnergia
 
-	// 4. Se itera la estructura registro por registro
+	/// 4. Se itera la estructura registro por registro
 	//usando la variable registro
 	for filas.Next() {
 		var registro estructura.RegistroEnergia
