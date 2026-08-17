@@ -36,9 +36,10 @@ func GenerarReporte(registros []estructura.RegistroEnergia, startDate string, en
 	var rangos []RangoTiempo
 	fechaActual := inicio
 
-	// 1. CREAR EL EJE TEMPORAL (PERIOD)
+	// 1. Se crean los casos para consulta de mes, semana y dia
 	for fechaActual.Before(finGlobal) || fechaActual.Equal(finGlobal) {
 		switch kindPeriod {
+
 		case "monthly":
 			inicioMes := time.Date(fechaActual.Year(), fechaActual.Month(), 1, 0, 0, 0, 0, time.UTC)
 			finMes := inicioMes.AddDate(0, 1, -1).Add((24 * time.Hour) - time.Second)
@@ -55,7 +56,7 @@ func GenerarReporte(registros []estructura.RegistroEnergia, startDate string, en
 			rangos = append(rangos, RangoTiempo{Inicio: fechaActual, Fin: finRango})
 			fechaActual = fechaActual.AddDate(0, 0, 7)
 
-		default: // "daily"
+		default: //Para dia
 			finDia := fechaActual.Add((24 * time.Hour) - time.Second)
 			etiqueta := fmt.Sprintf("%s %d", obtenerMesCorto(fechaActual.Month()), fechaActual.Day())
 			periodos = append(periodos, etiqueta)
@@ -66,11 +67,11 @@ func GenerarReporte(registros []estructura.RegistroEnergia, startDate string, en
 
 	cantidadCajones := len(periodos)
 
-	// 2. SEPARAR LOS IDs DE LOS MEDIDORES POR COMAS (Ej: "1,2" -> ["1", "2"])
+	// 2. Para separar los id ingresados por (,) en caso de ser msa de uno
 	listaIDs := strings.Split(metersIDsParam, ",")
 	var listaDatosMedidores []estructura.ConsumoMedidor
 
-	// 3. PROCESAR CADA MEDIDOR INDEPENDIENTEMENTE
+	// 3. Proceso para cada id de medidor independiente
 	for _, mIDStr := range listaIDs {
 		mIDTrim := strings.TrimSpace(mIDStr)
 		meterIdInt, _ := strconv.Atoi(mIDTrim)
@@ -111,7 +112,7 @@ func GenerarReporte(registros []estructura.RegistroEnergia, startDate string, en
 		listaDatosMedidores = append(listaDatosMedidores, datosMedidor)
 	}
 
-	// 4. EMPACAR TODO EN LA CAJA FINAL
+	// 4. Insertar todo en la caja final
 	respuestaFinal := estructura.RespuestaConsumo{
 		Period:    periodos,
 		DataGraph: listaDatosMedidores,
